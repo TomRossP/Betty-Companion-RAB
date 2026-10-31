@@ -1,4 +1,7 @@
-# Betty Companion
+# Betty Companion RAB
+
+The Request A Bet edition of Betty Companion: everything Betty Companion 1.1.3 does, plus the pink Request A Bet
+wagers from the website. Versioned on its own from 1.0.0; see [CHANGELOG.md](CHANGELOG.md).
 
 Works through Betty's unedited wagers on a shop till. It reads each slip, checks it against Betty's racecards and
 enters it. In LIVE mode it places the wager; in TEST mode it stops just before placing. Anything it can't do is left
@@ -6,7 +9,7 @@ for staff, with the reason.
 
 ## On a till
 
-1. Download `BettyCompanion-<version>.zip` from **Releases** and unzip it somewhere the till can write to, for example
+1. Download `BettyCompanionRAB-<version>.zip` from **Releases** and unzip it somewhere the till can write to, for example
    `C:\BettyCompanion`.
 2. Double-click `BettyCompanion.exe`. Nothing is installed.
 3. Pair the till with the relay once: **Controls** tab, **Pair this till**, then approve the code on the relay's

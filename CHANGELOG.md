@@ -4,10 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
-## [1.2.0] - 2026-10-31
+## [RAB 1.0.0] - 2026-10-31
 
-Request A Bet: the pink wagers sent from the website (user's screenshots of 31 Oct, `scratch/betty_screens/43-50`).
-Not built yet.
+**Betty Companion RAB** starts here, versioned on its own from 1.0.0 (its own repository, Betty-Companion-RAB). It is
+Betty Companion 1.1.3 (below) plus Request A Bet: the pink wagers sent from the website (user's screenshots of
+31 Oct, `scratch/betty_screens/43-50`). The window is titled "Betty Companion RAB" and the build is
+`BettyCompanionRAB-<version>.zip`. Not built yet.
 
 ### Added
 - **Pink (RAB) wagers are worked through.** Before, a pink box read as the end of the unedited list, so neither it nor

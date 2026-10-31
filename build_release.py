@@ -4,7 +4,7 @@ Builds the Betty Companion release: python build_release.py
   1. PyInstaller (BettyCompanion.spec): dist\\BettyCompanion\\, one folder, windowed, no UPX
   2. Tesseract copied in from this PC (C:\\Program Files\\Tesseract-OCR): the program and English only
   3. README.txt next to the exe
-  4. dist\\BettyCompanion-<version>.zip, with its SHA-256 (to check a download, or for a false-positive report)
+  4. dist\\BettyCompanionRAB-<version>.zip, with its SHA-256 (to check a download, or for a false-positive report)
 
 The tills need nothing installed: unzip, double-click BettyCompanion.exe.
 """
@@ -83,7 +83,7 @@ def main():
                     os.path.join(ROOT, "BettyCompanion.spec")], cwd=ROOT, check=True)
     copy_tesseract(os.path.join(APP, "_internal", "tesseract"))
     shutil.copy2(os.path.join(ROOT, "release", "README.txt"), APP)
-    zip_path = os.path.join(DIST, f"BettyCompanion-{ver}.zip")
+    zip_path = os.path.join(DIST, f"BettyCompanionRAB-{ver}.zip")  # RAB edition: never mistaken for Betty Companion 1.0.0
     if os.path.exists(zip_path):
         os.remove(zip_path)
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:

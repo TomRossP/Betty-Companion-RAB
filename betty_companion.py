@@ -1,5 +1,5 @@
-__version__ = "1.2.0"
-APP_NAME = f"Betty Companion v{__version__}"
+__version__ = "1.0.0"  # Betty Companion RAB, versioned on its own from 1.0.0 (built on Betty Companion 1.1.3)
+APP_NAME = f"Betty Companion RAB v{__version__}"
 
 
 import pyautogui  # type: ignore
@@ -3676,8 +3676,8 @@ QUEUE_SELECTED_RGB = (0, 255, 65)
 # Some unedited wagers show yellow; they edit like any other (user, 23 Oct). Before, a yellow top box read as an
 # empty list, so the watcher saw no work.
 QUEUE_YELLOW_RGB = (255, 255, 128)
-# Request A Bet wagers (from the website) are pink, and stay pink when clicked (user's screenshot, 31 Oct). Before
-# 1.2.0 a pink box read as the end of the list, so neither it nor any wager below it was seen.
+# Request A Bet wagers (from the website) are pink, and stay pink when clicked (user's screenshot, 31 Oct). In
+# Betty Companion (1.1.3) a pink box read as the end of the list, so neither it nor any wager below it was seen.
 QUEUE_RAB_RGB = (255, 191, 223)
 QUEUE_UNEDITED_RGBS = [QUEUE_WAITING_RGB, QUEUE_YELLOW_RGB, QUEUE_RAB_RGB]
 
