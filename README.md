@@ -20,6 +20,8 @@ The staff guide is [release/README.txt](release/README.txt). The relay is set up
 - `betty_companion.py`: the program. `python betty_companion.py` runs it on its own.
 - `launcher.py`: the control window (`BettyCompanion.exe`). It runs the program with `--backend`.
 - `relay_link.py`: pairing with the relay. `error_guide.py`: the explanations shown in the Errors tab.
+- `rab_rules.py`: Request A Bet (the pink wagers from the website): reads the typed request and the customer's account
+  notes. The notes shorthand is in `rab_notes_dictionary.json`; a note it doesn't cover means the request is skipped.
 - `python build_release.py`: builds `dist\BettyCompanion\` and the release zip. Needs PyInstaller and Tesseract
   installed on the build PC.
 - Per-PC settings and keys go in `.env`, which is never committed. See [CHANGELOG.md](CHANGELOG.md) for every release.

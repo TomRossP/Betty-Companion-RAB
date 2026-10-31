@@ -4,6 +4,43 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
+## [1.2.0] - 2026-10-31
+
+Request A Bet: the pink wagers sent from the website (user's screenshots of 31 Oct, `scratch/betty_screens/43-50`).
+Not built yet.
+
+### Added
+- **Pink (RAB) wagers are worked through.** Before, a pink box read as the end of the unedited list, so neither it nor
+  any wager below it was ever seen. `read_unedited_queue_boxes` says which boxes are pink (`QUEUE_RAB_RGB`).
+- **Everything is read on View Wagers before the bet edit is opened** (user: it saves time). `check_rab_on_view_wagers`,
+  cheapest first: the request in typed text (`rab_rules.parse_request`; no slip reader); a sports bet is skipped
+  (racing only); the balance (`Balance - Tot Stake = Bal if accepted`, read in `read_wager_details`; below zero or
+  unread: skipped for now and looked at again after `RAB_BALANCE_RETRY_SECS`); then the account code above the struck
+  time is clicked and the account box's status (must be CURRENT) and notes are read, and the box closed with Continue.
+- **Account notes are read with a shorthand dictionary**, `rab_notes_dictionary.json` (re-read when edited): each
+  clause of a note ("NO BOG - £100 max stake") must match a rule, or the request is skipped with that clause named, so
+  shorthand is added rather than guessed. Meanings: refuse all, no BOG, max stake (the wager's total), no each way,
+  SP only, no dogs, no horses, singles only, no forecasts, UK & IRE only, max odds, information only.
+- **The request is matched to Betty's cards exactly** (`lock_rab_wager`): meeting, time and number, and the name must
+  agree; no staff prompt. Its cost must be the Tot Stake, and the notes are checked against it (`rab_rules.notes_breaches`).
+  NO BOG doesn't skip it: no selection gets 'g' (`bog_wanted`).
+- **In the bet edit** the request must be on the slip panel (`open_rab_slip`, read again and compared); then it is
+  entered like any wager, and Betty's price for each runner must be the requested one (85/40 = 85-40, 5.00 = 4-1).
+- **Placing** (`commit_rab_wager`): F12 opens Accept the Wager, which is checked (`check_rab_accept`: the debit, the
+  account, its available credit, and the notes read again); F12 places it; Enter closes "Customer Notified" and "This
+  bet is confirmed". The wager is noted as done before the second F12, so it can never be placed twice. Test mode
+  stops before the first F12, as for any wager.
+- **A RAB is never marked FAO** (user): skipped ones stay pink, go in the staff journal (Staff entries tab) and in
+  `logs/rab_ignored.json`, so they're left alone for the rest of the day, restarts included. A RAB that fails in the
+  bet edit is backed out the same way (`leave_wager_for_staff`).
+- Screens: `SCREEN_RAB_ACCEPT`, `MODAL_RAB_ACCOUNT`, `MODAL_RAB_NOTIFIED`, `MODAL_RAB_CONFIRMED`. `--check-screen`
+  shows what it reads on a RAB.
+- Error guide: a RAB section. Staff guide (`release/README.txt`): "Request A Bet". The spec ships `rab_rules` and the
+  dictionary.
+- Tests: `rab_cases.py` (the screenshots, the notes, the skips, never FAO, the double F12 with a fake Betty);
+  `screen_cases` 43-49. The remote screenshots were 1-4 px short of 1366x768 and shifted; they were padded back at
+  their measured offsets (pixel-exact; `scratch/betty_screens/RAB_README.txt`).
+
 ## [1.1.3] - 2026-10-30
 
 A new look for the window, the price check box with no price when struck, and times written without a 0.

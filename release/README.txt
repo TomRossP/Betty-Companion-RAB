@@ -35,6 +35,18 @@ EVERY DAY
 - A person using the keyboard or mouse pauses it; it carries on by itself after a minute with no activity.
 
 
+REQUEST A BET (PINK WAGERS)
+---------------------------
+Requests from the website show pink in the unedited list. Before opening one, the program reads the request, the
+balance it would leave, and the customer's account notes (it clicks the account code above the time). It only does
+horse and greyhound racing, and only when the notes clearly allow the bet. Then it enters it like any wager, presses
+F12, checks the Accept the Wager screen, presses F12 again and Enter on the two boxes that follow.
+A request it won't do is never marked FAO: it stays pink, the reason is under System, Staff entries, and the program
+leaves it alone for the rest of the day. One that would overdraw the account is looked at again every 5 minutes.
+The shorthand it understands in account notes is in rab_notes_dictionary.json (in the _internal folder). A note it
+doesn't understand means the request is left for staff: add the shorthand there so it's understood next time.
+
+
 WHEN SOMETHING GOES TO STAFF
 ----------------------------
 System tab, Errors: every problem in plain English, with what to do.

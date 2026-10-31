@@ -5,9 +5,61 @@ should do. explain(text) finds the first entry whose pattern matches. Add an ent
 import re
 
 CHECK_BY_HAND = "Open the wager in Betty and enter it by hand, checking every line against the slip."
+RAB_SKIPPED = ("Nothing was entered or marked FAO: it stays pink in the unedited list, and the program leaves it "
+               "alone today.")
 
 # (pattern, title, what it means, what to do). First match wins, so the specific ones come first.
 GUIDE: list[tuple[str, str, str, str]] = [
+    # --- Request A Bet (pink wagers from the website): skipped, never FAO ---
+    (r"RAB: account notes: .*doesn't cover",
+     "RAB: account note not understood",
+     "The customer's account notes have shorthand the program's RAB dictionary doesn't know, so it can't be sure "
+     "the request is allowed. " + RAB_SKIPPED,
+     "Read the account notes and do the request by hand if it's allowed. Then add the shorthand to "
+     "rab_notes_dictionary.json so it's understood next time."),
+    (r"RAB: account notes:",
+     "RAB: the account notes don't allow it",
+     "The customer's account notes rule this request out (a max stake, no each way, no dogs, SP only...). The "
+     "message says which. " + RAB_SKIPPED,
+     "Check the notes. Decline the request in Betty, or contact the customer, as the shop does."),
+    (r"RAB: .*would leave the balance|RAB: the balance couldn't be read",
+     "RAB: not enough in the account",
+     "The request would put the customer's balance below zero (or the balance couldn't be read). Nothing was "
+     "entered; the program looks at it again every few minutes, in case the customer deposits.",
+     "Nothing to do unless the customer is waiting: then check the balance and do it by hand."),
+    (r"RAB: a sports bet",
+     "RAB: sports bet",
+     "The request is a sports bet; the program only does horse and greyhound racing. " + RAB_SKIPPED,
+     "Do the request by hand."),
+    (r"RAB: .*isn't on Betty's cards|RAB: the request couldn't be read|RAB: .*can't enter yet|RAB: the request costs",
+     "RAB: request not understood",
+     "The request couldn't be matched to Betty's racecards exactly (meeting, time, number and name), its bet type "
+     "can't be entered yet, or its cost isn't the Tot Stake. The message says which. " + RAB_SKIPPED,
+     "Do the request by hand. If the text was a normal racing request, note the wager number for fixing."),
+    (r"RAB: account .* not CURRENT|RAB: the account code",
+     "RAB: account not current",
+     "The customer's account isn't shown as CURRENT (or its code couldn't be read). " + RAB_SKIPPED,
+     "Check the account in Betty before doing anything with the request."),
+    (r"RAB: Accept the Wager doesn't match",
+     "RAB: Accept the Wager didn't match",
+     "After the first F12, Betty's Accept the Wager screen showed a different amount, account or notes, or not "
+     "enough credit. The second F12 was NOT pressed, so nothing was placed. The program backed out.",
+     "Open the request in Betty and check it by hand."),
+    (r"RAB: F12 pressed on Accept the Wager",
+     "RAB: placed? Not confirmed",
+     "The second F12 was pressed, so the request may be placed, but Betty didn't come back to View Wagers as "
+     "expected. The program won't touch it again.",
+     "Check the wager and the customer's account in Betty BEFORE doing anything else."),
+    (r"instead of the requested",
+     "RAB: Betty's price isn't the requested price",
+     "The customer asked for a price, but Betty's price for the runner is different. Nothing was placed, and "
+     "the program backed out (not FAO).",
+     "Decide with the customer (or as the shop does) whether to take Betty's price, and do it by hand."),
+    (r"RAB: the bet edit didn't show the request|RAB .* skipped|stopped part-way: left unedited",
+     "RAB: left unedited",
+     "Something went wrong with a request a bet while it was being entered, so the program backed out. It isn't "
+     "marked FAO and the program leaves it alone today.",
+     "Open the request in Betty and do it by hand."),
     # --- Placing ---
     (r"after F12, wager .* still in the unedited list",
      "Placed? Not confirmed",
