@@ -1,0 +1,50 @@
+{
+  "_how": [
+    "The shorthand staff write in a customer's account notes, for Request A Bet (RAB) wagers.",
+    "A note is split into clauses where staff separate restrictions: ' - ', ',', ';', ' / ', '|', a full stop, a new line.",
+    "Each clause must match ONE rule's 'match' as a whole (capitals don't matter), or the RAB is skipped and the clause is",
+    "named in the staff entry, so a new shorthand is added here rather than guessed.",
+    "'match' is a regular expression: '|' between alternatives, '?' after something optional, '\\s*' for any spaces.",
+    "{amount} stands for a money amount (£100, 100, £1.50, 50p, £1k); {odds} for a price (10/1, 10-1, 11.00, evens).",
+    "'means' is one of: refuse_all, no_bog, max_stake, no_each_way, sp_only, no_greyhounds, no_horses, singles_only,",
+    "no_forecasts, uk_ire_only, max_odds, no_sports, ignore (information only, not a restriction).",
+    "max_stake is the wager's total stake (Tot Stake on View Wagers). no_bog doesn't skip the bet: it goes on without 'g'."
+  ],
+  "rules": [
+    {"match": "no\\s*b\\.?\\s*o\\.?\\s*g\\.?|bog\\s*off|no\\s*best\\s*odds(\\s*guaranteed)?|non?[\\s-]*bog",
+     "means": "no_bog", "example": "NO BOG"},
+
+    {"match": "{amount}\\s*max(imum)?(\\s*stake)?|max(imum)?(\\s*stake)?(\\s*(of|is|=))?\\s*{amount}|ms\\s*{amount}|{amount}\\s*ms|stake\\s*limit\\s*{amount}|{amount}\\s*(stake\\s*)?limit|limit(ed)?\\s*(to\\s*)?{amount}|{amount}\\s*max\\s*bet|max\\s*bet\\s*{amount}",
+     "means": "max_stake", "example": "£100 max stake"},
+
+    {"match": "no\\s*(e\\s*/?\\s*w|each\\s*way|each\\s*ways)|win\\s*only|wins\\s*only",
+     "means": "no_each_way", "example": "NO E/W"},
+
+    {"match": "sp\\s*only|no\\s*(ep|eps|early\\s*prices?|prices?|board\\s*prices?|price\\s*taken)|no\\s*taking\\s*prices?",
+     "means": "sp_only", "example": "SP ONLY"},
+
+    {"match": "no\\s*(dogs?|greyhounds?|greys|dog\\s*racing)|horses?\\s*only|horse\\s*racing\\s*only",
+     "means": "no_greyhounds", "example": "NO DOGS"},
+
+    {"match": "no\\s*(horses?|horse\\s*racing|racing)|dogs?\\s*only|greyhounds?\\s*only",
+     "means": "no_horses", "example": "DOGS ONLY"},
+
+    {"match": "singles?\\s*only|no\\s*(multiples?|multis?|accas?|accumulators?|doubles?|perms?)",
+     "means": "singles_only", "example": "SINGLES ONLY"},
+
+    {"match": "no\\s*(sports?|football|footy|foot)(\\s*bets?)?|racing\\s*only",
+     "means": "no_sports", "example": "NO SPORTS"},
+
+    {"match": "no\\s*(forecasts?|f\\s*/?\\s*casts?|fcs?|tricasts?|t\\s*/?\\s*casts?)",
+     "means": "no_forecasts", "example": "NO F/CASTS"},
+
+    {"match": "uk\\s*(and|&|\\+)?\\s*(ire|irish|ireland)\\s*only|uk\\s*only|no\\s*(international|internationals|intl|foreign|overseas|abroad|usa|us|french|aus|australian)(\\s*racing)?",
+     "means": "uk_ire_only", "example": "UK & IRE ONLY"},
+
+    {"match": "max(imum)?\\s*(odds|price)\\s*(of\\s*)?{odds}|{odds}\\s*max(imum)?(\\s*(odds|price))?",
+     "means": "max_odds", "example": "MAX ODDS 10/1"},
+
+    {"match": "no\\s*rab|no\\s*request\\s*a\\s*bet|no\\s*bets?|closed|account\\s*closed|suspended|self[\\s-]*excluded|s/?e|excluded|barred|banned|stopped|do\\s*not\\s*(accept|take)(\\s*bets?)?|dont\\s*(accept|take)(\\s*bets?)?|refer(\\s*all)?(\\s*bets?)?(\\s*to\\s*(manager|mgr|office))?|manager\\s*only|mgr\\s*only|see\\s*manager|check\\s*with\\s*(manager|mgr|office)|gamstop|safer\\s*gambling\\s*hold|on\\s*hold",
+     "means": "refuse_all", "example": "REFER ALL BETS"}
+  ]
+}

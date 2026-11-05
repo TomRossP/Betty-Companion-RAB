@@ -4,6 +4,136 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
+## [RAB 1.2.3] - 2026-11-05
+
+Now stands on **Betty Companion 1.2.28** (below): written prices read twice before they're typed, the price box with no
+Price when struck, and a race-list pick landing on a runner already on the slip going to staff. Nothing of RAB's own has
+changed, except that the price box is also answered after the Master Index's Choose Bet and Stake button, as it is after
+F8. F8 isn't pressed again from the index: if Betty stays there, the usual check sends the wager to staff. Sports requests
+are still off until `RAB_SPORTS=1`, and have not yet run on a RAB till.
+
+## [RAB 1.2.2] - 2026-11-05
+
+First runs on real Betty, on the manager till (a shop till, with the shop's feed: no bet placed, `--index-probe` and `--index-try` on a
+callover). Rows clicked and their lines read back on the slip, including two rows reading 'Both Teams To Scor' told apart by price.
+About 9 s a selection. The website's wording can only be proved on a RAB till. Off until `RAB_SPORTS=1`. Not built yet.
+
+### Fixed
+- **A search is typed in one go.** With a pause after its first letter to check it landed, Betty started a search of everything holding
+  that letter, and what exists came back "No selections found": 1 good of 9. In one go: 12 of 12, in 3 s, or 5 s with a ';'. Before typing:
+  Betty has the keyboard, the index is showing, the box is clicked. Read back after.
+- **Betty's red "Failure to Read Complete Data - End of File?" box** (mi_16, `\\Events\\5byBFTRP.dat`), seen on a search: `MODAL_READ_FAILURE`.
+  Nothing goes on until its Continue is clicked, so it's clicked wherever the index is waiting, and the search is asked again.
+- A list holding racing rows read as still being drawn: rows with no price, and hatched rows (no prices in yet). They're read, and not usable.
+- A search gets 8 s, not 3: this till takes 3-5 s to answer.
+- The callover's first screen, a picture menu, has its own Master Index button. The probe goes through a folder, as a wager does.
+- The probe won't press a key unless Betty has the keyboard: Windows refused Betty the front once, and an Esc may have gone to another window.
+
+### Added
+- Price shapes from the real till: Evens, and most of the bold top row's, which Tesseract read as '4-14' for 4-11. A row read as unsure can
+  still be the one wanted when every other row is surely not at that price and its reading is close to it.
+
+## [RAB 1.2.1] - 2026-11-05
+
+Now stands on **Betty Companion 1.2.25** (below). Nothing of its own has changed. Not built yet.
+
+## [RAB 1.2.0] - 2026-11-05
+
+**Sports requests, entered through Betty's Master Index** (user's screenshots and video, 5 Nov,
+`scratch/betty_screens/mi_*`). Built and tested offline against those screens; **not yet run on Betty**, so off by default:
+`RAB_SPORTS=1` in `.env` turns it on. Not built yet.
+
+### Added
+- **The Master Index** (`master_index.py`, section 6e of `betty_companion.py`). `SCREEN_MASTER_INDEX`; `read_index` reads the
+  search box, the state and each row's event, market, result and price. Prices are read by their exact pixels
+  (`index_price_glyphs.json`): Tesseract read `5-2` as `3-2` and `9-2`, and `2-5` as `2-9`. A shape not in the table is
+  read by Tesseract and marked unsure, and can't by itself tell two rows apart.
+- **A list is believed only when every row holds what was typed.** That catches the last search still showing after a key
+  (video: `kups`, rows without KuPS) and Betty's repeating list (`mi_5`). A row is taken only when its event, market and
+  result fit the request's line, as Betty cut them off.
+- **The price decides nothing alone** (user: always the price when struck). One row fits by text: it's clicked at whatever
+  price, and Betty's price box is answered as usual. Two rows reading alike ('Both Teams To Scor'): the requested price, then
+  the price in Betty's files. Still alike: left for staff.
+- **When Betty bugs out** (user): wait, delete a letter and put it back, type it all again, a shorter wording, the event
+  alone with the red arrow's pages, then out by a folder button and back in, twice. Then the wager is backed out and come
+  back to (`RAB_INDEX_RETRY_SECS`, `RAB_INDEX_TRIES`), since the website only offers what's in Betty: "No selections found"
+  is never taken as a real miss on RAB. Only then, the staff journal: pink, never FAO. `IndexStuck`.
+- **After each click the slip must show that line**, numbered one more than before. Anything else stops the wager.
+- **Filters left on are put back** (they last until Betty closes): Anytime, Pre-event, Standard, no sport.
+- **A long request is read by its `>`** on View Wagers (4 of 10 selections show), down to the closing `)`, with nothing left
+  to scroll; the lines joined where they overlap. Never entered without that. Racing multiples too: only the last selection
+  has the `)` (`rab_rules.parse_request`), so a racing multiple no longer reads as unread.
+- **A sports line is split into event, market and result** (nothing marks where they end, user) by Betty's own files
+  (`betty_feed.SportsCard`), which also correct an OCR slip in a name, else by `sports_markets.json`. Neither is a stop: the row
+  is found from the whole line, with the event alone as the search.
+- `Acc On All Selns` is an accumulator. New account note: `no_sports` (NO SPORTS, RACING ONLY); HORSES ONLY and DOGS ONLY stop
+  sports too. NO BOG, UK & IRE ONLY and NO DOGS don't.
+- **A test tool, never used by the watcher:** `python betty_companion.py --index-probe "over 2.5; monaco" ...` opens an empty
+  bet by Accept Cash Wager, runs each search at three typing speeds, saves every frame to `logs\index_probe_<time>`, and backs
+  out. It can't click a row, Choose Bet or F12. `--index-try "<event market result @ price>" ...` also clicks each row and checks
+  its line, then backs out. Any key or click from a person stops either.
+
+### Changed
+- `go_home` on the index clicks the slip's grey foot before Esc: Esc does nothing with the search area focused, and backs out
+  of the wager otherwise (user). The beige isn't clicked: Remove is there. Self-correction never presses Esc.
+- With a sports selection on a wager, the previous-selections panel isn't used (Master Index rows there crash Betty), and Choose
+  Bet and Stake is clicked: the index takes no shortcuts.
+- `INDEX_TYPE_AHEAD=1` types the next search while Betty loads back (user: it buffers). Off until test mode's logs show it's safe,
+  and only when the row was at the requested price, since Betty's price box could otherwise catch the letters.
+
+### Tests
+- `scratch/ocr_eval/index_cases.py`; `rab_cases.py` sections 9-12. Stand-ins for Betty: nothing here has been run on Betty.
+
+## [RAB 1.1.0] - 2026-11-05
+
+Betty Companion RAB now stands on **Betty Companion 1.2.24** (below), not 1.1.3: everything since 1.1.3 comes with it (self-correcting reads, teaching, shared lessons, shop settings, the
+faster entry). Later builds of Betty Companion come across by merging. Not built yet.
+
+### Changed
+- **A RAB takes the price when struck, like any wager** (user, 5 Nov: a RAB behaves exactly as the normal system, reading computer text instead of handwriting). Before, a line whose price wasn't the requested one stopped the wager; it's now a line in the log, and Betty's price box is answered as for any wager.
+
+### Tests
+- RAB's screens are `scratch/betty_screens/rab_43_...` to `rab_50_...`: Betty Companion's own 43-61 came across with its tests. `run_all_tests.py` runs `rab_cases.py`.
+
+## [RAB 1.0.0] - 2026-10-31
+
+**Betty Companion RAB** starts here, versioned on its own from 1.0.0 (its own repository, Betty-Companion-RAB). It is
+Betty Companion 1.1.3 (below) plus Request A Bet: the pink wagers sent from the website (user's screenshots of
+31 Oct, `scratch/betty_screens/43-50`). The window is titled "Betty Companion RAB" and the build is
+`BettyCompanionRAB-<version>.zip`. Not built yet.
+
+### Added
+- **Pink (RAB) wagers are worked through.** Before, a pink box read as the end of the unedited list, so neither it nor
+  any wager below it was ever seen. `read_unedited_queue_boxes` says which boxes are pink (`QUEUE_RAB_RGB`).
+- **Everything is read on View Wagers before the bet edit is opened** (user: it saves time). `check_rab_on_view_wagers`,
+  cheapest first: the request in typed text (`rab_rules.parse_request`; no slip reader); a sports bet is skipped
+  (racing only); the balance (`Balance - Tot Stake = Bal if accepted`, read in `read_wager_details`; below zero or
+  unread: skipped for now and looked at again after `RAB_BALANCE_RETRY_SECS`); then the account code above the struck
+  time is clicked and the account box's status (must be CURRENT) and notes are read, and the box closed with Continue.
+- **Account notes are read with a shorthand dictionary**, `rab_notes_dictionary.json` (re-read when edited): each
+  clause of a note ("NO BOG - £100 max stake") must match a rule, or the request is skipped with that clause named, so
+  shorthand is added rather than guessed. Meanings: refuse all, no BOG, max stake (the wager's total), no each way,
+  SP only, no dogs, no horses, singles only, no forecasts, UK & IRE only, max odds, information only.
+- **The request is matched to Betty's cards exactly** (`lock_rab_wager`): meeting, time and number, and the name must
+  agree; no staff prompt. Its cost must be the Tot Stake, and the notes are checked against it (`rab_rules.notes_breaches`).
+  NO BOG doesn't skip it: no selection gets 'g' (`bog_wanted`).
+- **In the bet edit** the request must be on the slip panel (`open_rab_slip`, read again and compared); then it is
+  entered like any wager, and Betty's price for each runner must be the requested one (85/40 = 85-40, 5.00 = 4-1).
+- **Placing** (`commit_rab_wager`): F12 opens Accept the Wager, which is checked (`check_rab_accept`: the debit, the
+  account, its available credit, and the notes read again); F12 places it; Enter closes "Customer Notified" and "This
+  bet is confirmed". The wager is noted as done before the second F12, so it can never be placed twice. Test mode
+  stops before the first F12, as for any wager.
+- **A RAB is never marked FAO** (user): skipped ones stay pink, go in the staff journal (Staff entries tab) and in
+  `logs/rab_ignored.json`, so they're left alone for the rest of the day, restarts included. A RAB that fails in the
+  bet edit is backed out the same way (`leave_wager_for_staff`).
+- Screens: `SCREEN_RAB_ACCEPT`, `MODAL_RAB_ACCOUNT`, `MODAL_RAB_NOTIFIED`, `MODAL_RAB_CONFIRMED`. `--check-screen`
+  shows what it reads on a RAB.
+- Error guide: a RAB section. Staff guide (`release/README.txt`): "Request A Bet". The spec ships `rab_rules` and the
+  dictionary.
+- Tests: `rab_cases.py` (the screenshots, the notes, the skips, never FAO, the double F12 with a fake Betty);
+  `screen_cases` 43-49. The remote screenshots were 1-4 px short of 1366x768 and shifted; they were padded back at
+  their measured offsets (pixel-exact; `scratch/betty_screens/RAB_README.txt`).
+
 ## [1.2.28] - 2026-11-05
 
 ### Fixed

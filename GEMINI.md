@@ -23,7 +23,7 @@ Before making ANY code modifications or generating replacement scripts, you MUST
 
 ## 2. Layout since 1.0.0 (the exe)
 - `betty_companion.py` is still the program: bug fixes and features go there, versioned as above. `python betty_companion.py` still runs it on its own.
-- `launcher.py` is the control window (`BettyCompanion.exe`). It runs the program as `--backend` and talks to it through pipes (section 7 of `betty_companion.py`). `relay_link.py` handles pairing with the relay; `error_guide.py` holds the plain-English explanations in the Errors tab. Add an entry there when a new staff reason or error message is added.
+- `launcher.py` is the control window (`BettyCompanion.exe`). It runs the program as `--backend` and talks to it through pipes (section 7 of `betty_companion.py`). `relay_link.py` handles pairing with the relay; `error_guide.py` holds the plain-English explanations in the Errors tab. `rab_rules.py` reads Request A Bet requests and account notes (shorthand in `rab_notes_dictionary.json`, shipped next to the exe's files). Add an entry there when a new staff reason or error message is added.
 - A fix reaches the tills only in a new build: `python build_release.py` makes `dist\BettyCompanion-<version>.zip` from the current files.
 
 ## 3. Invariant Project Constraints

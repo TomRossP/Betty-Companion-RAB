@@ -35,6 +35,18 @@ EVERY DAY
 - A person using the keyboard or mouse pauses it; it carries on by itself after a minute with no activity.
 
 
+REQUEST A BET (PINK WAGERS)
+---------------------------
+Requests from the website show pink in the unedited list. Before opening one, the program reads the request, the
+balance it would leave, and the customer's account notes (it clicks the account code above the time). It only does
+horse and greyhound racing, and only when the notes clearly allow the bet. Then it enters it like any wager, presses
+F12, checks the Accept the Wager screen, presses F12 again and Enter on the two boxes that follow.
+A request it won't do is never marked FAO: it stays pink, the reason is under System, Staff entries, and the program
+leaves it alone for the rest of the day. One that would overdraw the account is looked at again every 5 minutes.
+The shorthand it understands in account notes is in rab_notes_dictionary.json (in the _internal folder). A note it
+doesn't understand means the request is left for staff: add the shorthand there so it's understood next time.
+
+
 WHEN SOMETHING GOES TO STAFF
 ----------------------------
 System tab, Errors: every problem in plain English, with what to do.
@@ -65,6 +77,9 @@ then reopen Betty Companion. A setting left out, or not a number, keeps the usua
 - SCAN_TIMEOUT_SECS (90), RECHECK_TIMEOUT_SECS (45)  longest wait for the slip reader (raise on a slow connection)
 - GEMINI_QUOTA_PAUSE_SECS (600)   a reader out of quota is left alone this long
 - LOG_UPLOAD_SECS (120), LESSON_SYNC_SECS (60)  how often logs and lessons go to the relay
+- Sports requests: RAB_SPORTS=1 turns them on (off: left pink, noted). RAB_INDEX_RETRY_SECS (120) and RAB_INDEX_TRIES (5): how
+  long before a request the Master Index wouldn't show is looked at again, and how many times. INDEX_LIST_SECS (3),
+  INDEX_OPEN_SECS (8), INDEX_ADD_SECS (12): how long Betty gets. INDEX_TYPE_AHEAD (0): 1 types the next search while Betty loads.
 - Kept in the logs folder: STAFF_SCREENSHOTS_KEPT (20), SLIP_IMAGES_KEPT (200), REUSE_SHOTS_KEPT (10),
   CORPUS_KEPT (1500 pictures, about 90 KB each), STAFF_JOURNAL_DAYS (30)
 House rules and meetings: put this shop's own bookmaker_rules.json or meetings_directory.json next to

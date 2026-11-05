@@ -39,7 +39,7 @@ import app_paths
 import lessons
 import relay_logs
 
-WINDOW_TITLE = "Betty Companion"
+WINDOW_TITLE = "Betty Companion RAB"
 REQUIRED_SCREEN = (1366, 768)
 GEMINI_CHECK_SECS = 300   # the free Gemini check, every 5 minutes (and on a click)
 DATA_REFRESH_SECS = 60    # racecards, meetings and runners
